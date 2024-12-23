@@ -47,7 +47,7 @@ def home():
                 modify_pdf(filename,cpf,position,color,app.config["UPLOAD_FOLDER"] )   
                 return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
             except Exception as e:
-                flash("Erro no envio de arquivo", str(e))
+                flash("Erro no envio de arquivo" +  str(e))
                 return redirect(request.url)
 
     return render_template("index.html", form=form)

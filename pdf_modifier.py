@@ -6,7 +6,7 @@ from io import BytesIO
 import os
 
 def modify_pdf(filename, cpf, position,color,upload_folder):
-    packet = BytesIO
+    packet = BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
 
     if position == 'top-left':
@@ -36,7 +36,7 @@ def modify_pdf(filename, cpf, position,color,upload_folder):
         new_pdf = PdfReader(packet)
         print("PDF foi criado com sucesso")
     except Exception as e:
-        print("Erro ao criar o PDF", str(e))
+        print("Erro ao criar o PDF" + str(e))
 
     try:
         existing_pdf = PdfReader(open(os.path.join(upload_folder,filename), "rb"))
@@ -44,12 +44,12 @@ def modify_pdf(filename, cpf, position,color,upload_folder):
         output = PdfWriter()
         print(f"Números de páginas no PDF é:{len(existing_pdf.pages)}")    
         for i in range(len(existing_pdf.pages)):
-            page = existing_pdf.page[i]
-            page.merge_page(new_pdf.page[0])
+            page = existing_pdf.pages[i]
+            page.merge_page(new_pdf.pages[0])
             output.add_page(page)
 
         with open(os.path.join(upload_folder,filename),"wb") as outputStream:
             output.write(outputStream)
         print(f"pdf foi modificado com sucesso: {os.path.join(upload_folder,filename)}")
     except Exception as e:
-        print("Erro ao abrir o PDF Gerado", str(e))    
+        print("Erro ao abrir o PDF Gerado" + str(e))    
