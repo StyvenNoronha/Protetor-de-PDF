@@ -22,4 +22,33 @@ class CPFInputForm(FlaskForm):
     submit = SubmitField('Submit')
     color = StringField('color', validators=[DataRequired()])
 
-  
+@app.route("/",methods=["GET","POST"])
+def home():
+    form = CPFInputForm()
+    if form.validate_on_submit():
+        if 'file' not in request.files:
+            flash('Arquivo não incluído')
+            return redirect(request.url)
+        file = request.files['file']
+
+        if file.filename == '':
+            flash("Arquivo não selecionado")
+            return redirect(request.url)
+        
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            cpf = form.cpf.data
+            position = form.position.data
+            color = form.color.data
+
+            try:
+                modify_pdf(filename,cpf,position,color,app.config["UPLOAD_FOLDER"] )   
+                return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
+            except Exception as e:
+                flash("Erro no envio de arquivo", str(e))
+                return redirect(request.url)
+
+    return render_template("index.html", form=form)
+     
