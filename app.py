@@ -21,6 +21,8 @@ class CPFInputForm(FlaskForm):
     
     submit = SubmitField('Submit')
     color = StringField('color', validators=[DataRequired()])
+    Nome = StringField("Nome",validators=[DataRequired()])
+
 
 @app.route("/",methods=["GET","POST"])
 def home():
@@ -42,9 +44,10 @@ def home():
             cpf = form.cpf.data
             position = form.position.data
             color = form.color.data
+            Nome = form.Nome.data
 
             try:
-                modify_pdf(filename,cpf,position,color,app.config["UPLOAD_FOLDER"] )   
+                modify_pdf(filename,cpf,position,color,app.config["UPLOAD_FOLDER"], Nome)   
                 return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
             except Exception as e:
                 flash("Erro no envio de arquivo" +  str(e))

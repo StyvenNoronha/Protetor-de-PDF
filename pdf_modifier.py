@@ -5,21 +5,21 @@ from reportlab.lib.pagesizes import A4
 from io import BytesIO
 import os
 
-def modify_pdf(filename, cpf, position,color,upload_folder):
+def modify_pdf(filename, cpf, position,color,upload_folder, Nome):
     packet = BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
 
     if position == 'top-left':
-        x= 50
+        x= 20
         y = 800
     elif position == 'top-right':
-        x = 500
+        x = 350
         y = 800
     elif position == 'bottom-left':
         x = 50
         y = 50
     elif position == 'bottom-right':
-        x = 500
+        x = 350
         y = 50
     else:
         raise ValueError("posição inválida")
@@ -28,7 +28,8 @@ def modify_pdf(filename, cpf, position,color,upload_folder):
 
     can.setFillColor(color)
     can.setFont("Helvetica", 10)
-    can.drawString(x,y,cpf) 
+    name = f"{Nome} do CPF {cpf}"
+    can.drawString(x,y,name) 
     can.save()     
 
     try:
